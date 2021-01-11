@@ -11,8 +11,6 @@ My name is Davi Epifânio Maia, I am trained in systems analysis and development
 
  ## Who am I? 🤔
  ```
-Javascript
-
 console.log({
         name: "Davi Epifânio Maia",
         years: "23",
