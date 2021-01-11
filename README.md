@@ -16,7 +16,6 @@ Javascript
 console.log({
         name: "Davi Epifânio Maia",
         years: "23",
-        web: "https://www.linkedin.com/in/davi-epif%C3%A2nio-75158b191"
         study: "Analysis and Systems Development"
         code: {
             'frontend': ['HTML', 'CSS', 'JavaScript', 'ReactJS', 'Styled-Components'],
