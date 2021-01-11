@@ -16,7 +16,7 @@ console.log({
         years: "23",
         study: "Analysis and Systems Development"
         code: {
-            'frontend': ['HTML', 'CSS', 'JavaScript', 'ReactJS', 'Styled-Components'],
+            'frontend': ['HTML', 'CSS', 'JavaScript', 'ReactJS', 'React Native','Styled-Components'],
             'backend': ['NodeJS', 'Java'],
             'database': ['PostgreSQL', 'MySQL', 'SQLite3', 'MongoDB'],
             'devops': ['Docker'],
@@ -25,16 +25,7 @@ console.log({
        architecture: ['SPA', 'MVC', 'Serverless', 'microservices']
 })
  ```
- 
-## I like it! 🖥️ 
-* ReactJS
-* React Native
-* Backend Web Development
-* Front Web Development
-
 ![Davi Epifânio's languages stats](https://github-readme-stats.vercel.app/api/top-langs/?username=EpifanioD&layout=compact&&theme=react)
-
- 
 
 ## Current Works 
 
