@@ -13,16 +13,16 @@ My name is Davi Epifânio Maia, I am trained in systems analysis and development
  ```
 console.log({
         name: "Davi Epifânio Maia",
-        years: "23",
+        years: "25",
         study: "Analysis and Systems Development"
         code: {
-            'frontend': ['HTML', 'CSS', 'JavaScript', 'ReactJS', 'React Native','Styled-Components'],
-            'backend': ['NodeJS', 'Java'],
-            'database': ['PostgreSQL', 'MySQL', 'SQLite3', 'MongoDB'],
-            'devops': ['Docker'],
+            'frontend': ['HTML', 'CSS', 'JavaScript', 'ReactJS', 'React Native','Styled-Components', 'Laravel', 'Codeigniter'],
+            'backend': ['NodeJS', 'Java', PHP,],
+            'database': ['PostgreSQL', 'MySQL', 'SQLite3', 'MongoDB', 'Oracle', 'SQLServer'],
+            'devops': ['Docker', 'CI/CD',],
             'tools': ['GIT', 'GitHub']
         }
-       architecture: ['SPA', 'MVC', 'Serverless', 'microservices']
+       architecture: ['SPA', 'MVC', 'Serverless', 'Microservices']
 })
  ```
 ![Davi Epifânio's languages stats](https://github-readme-stats.vercel.app/api/top-langs/?username=EpifanioD&layout=compact&&theme=react)
