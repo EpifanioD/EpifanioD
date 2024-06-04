@@ -13,8 +13,9 @@ My name is Davi Epifânio Maia, I am trained in systems analysis and development
  ```
 console.log({
         name: "Davi Epifânio Maia",
-        years: "25",
-        study: "Analysis and Systems Development"
+        years: "27",
+        study: "Analysis and Systems Development",
+        postGraduation: "Software Architecture",
         code: {
             'frontend': ['HTML', 'CSS', 'JavaScript', 'ReactJS', 'React Native','Styled-Components', 'Laravel', 'Codeigniter'],
             'backend': ['NodeJS', 'Java', PHP,],
