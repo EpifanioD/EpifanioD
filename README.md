@@ -30,4 +30,4 @@ console.log({
 
 ## Current Works 
 
- * I'm currently working on 🚀 building **Personal Project** and working up on polishing my skills.
+ * 🚀 building **Personal Project** and working up on polishing my skills.
