@@ -5,12 +5,12 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   generate:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
 
     steps:
       - name: Generate Snake
@@ -21,10 +21,25 @@ jobs:
             dist/github-snake.svg?palette=github
             dist/github-snake-dark.svg?palette=github-dark
 
-      - name: Push Snake to output branch
-        uses: crazy-max/ghaction-github-pages@v4
-        with:
-          build_dir: dist
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BUILD_DIR: dist
+      - name: Publish Snake
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git clone --depth 1 --branch output \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git \
+            output-repo || git clone \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git \
+            output-repo
+
+          cd output-repo
+
+          git checkout --orphan output
+          git rm -rf . || true
+
+          cp ../dist/github-snake.svg .
+          cp ../dist/github-snake-dark.svg .
+
+          git add .
+          git commit -m "chore: update contribution snake" || true
+          git push origin output --force
