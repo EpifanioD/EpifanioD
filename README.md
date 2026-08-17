@@ -111,16 +111,8 @@ I enjoy designing software that is maintainable, scalable and easy to evolve.
 ## 📊 GitHub Stats
 
 <p align="center">
-  <img
-    src="https://github-readme-stats.vercel.app/api?username=EpifanioD&show_icons=true&hide_border=true&include_all_commits=true&count_private=true&theme=react"
-    height="180"
-    alt="Davi's GitHub Stats"
-  />
-  <img
-    src="https://github-readme-stats.vercel.app/api/top-langs/?username=EpifanioD&layout=compact&hide_border=true&langs_count=8&theme=react"
-    height="180"
-    alt="Davi's Top Languages"
-  />
+  <img src="./profile/stats.svg" height="180" />
+  <img src="./profile/top-langs.svg" height="180" />
 </p>
 
 ---
