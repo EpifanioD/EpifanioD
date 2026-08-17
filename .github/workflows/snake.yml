@@ -21,22 +21,10 @@ jobs:
             dist/github-snake.svg?palette=github
             dist/github-snake-dark.svg?palette=github-dark
 
-      - name: Publish Snake
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          cd dist
-
-          git init
-          git checkout --orphan output
-
-          git add .
-          git commit -m "chore: update contribution snake"
-
-          git remote add origin \
-            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-
-          git push origin output --force
+      - name: Deploy Snake
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: output
+          force_orphan: true
