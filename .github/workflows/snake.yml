@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Generate Snake
         uses: Platane/snk@v3
         with:
@@ -23,23 +26,19 @@ jobs:
 
       - name: Publish Snake
         run: |
+          cd dist
+
+          git init
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git clone --depth 1 --branch output \
-            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git \
-            output-repo || git clone \
-            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git \
-            output-repo
-
-          cd output-repo
-
           git checkout --orphan output
-          git rm -rf . || true
-
-          cp ../dist/github-snake.svg .
-          cp ../dist/github-snake-dark.svg .
 
           git add .
-          git commit -m "chore: update contribution snake" || true
-          git push origin output --force
+          git commit -m "chore: update contribution snake"
+
+          git push --force \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            output
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
