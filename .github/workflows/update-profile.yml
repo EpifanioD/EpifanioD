@@ -1,0 +1,49 @@
+name: Update Profile SVGs
+
+on:
+  schedule:
+    - cron: "30 3 * * *" # daily, away from the other workflows' 00:00
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "content/**"
+      - "scripts/**"
+      - ".github/workflows/update-profile.yml"
+
+permissions:
+  contents: write
+
+# serialize with the other workflows that commit to main
+concurrency:
+  group: profile-commit
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Generate SVGs
+        run: python scripts/generate_all.py
+
+      - name: Commit changes
+        run: |
+          git add assets data
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: regenerate profile SVGs [skip ci]"
+          git pull --rebase
+          git push
