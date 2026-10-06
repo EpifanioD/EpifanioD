@@ -32,22 +32,21 @@ DOOR_X = 158   # where Davi enters and leaves
 SEAT_X = 104   # where the walk ends, next to the chair
 
 PALETTE = {
-    "H": "#241c1a", "h": "#3b2e29",   # hair, highlight
-    "S": "#c58c74", "s": "#a8725c",   # skin, shade (sampled from the avatar)
-    "E": "#1a1412", "M": "#6b3a2e",   # eyes, mouth
-    "W": "#e6edf3",                   # earbuds
+    "H": "#0e0e10", "h": "#3a3a44",   # black hair, highlight / rim light
+    "S": "#f0c9b0", "s": "#d9a88e",   # light skin, shade
+    "E": "#1a1412", "M": "#8a4a3c",   # eyes, mouth
     "T": "#3d4250", "t": "#2d313b",   # dark grey t-shirt
     "P": "#2b3a55", "B": "#d0d7de",   # jeans, sneakers
 }
 
 FRONT = [
-    "......HHHHHH......",
-    ".....HHhHHhHH.....",
+    "......hhhhhh......",
+    ".....HHHHHHHH.....",
     "....HHHHHHHHHH....",
     "....HHHHHHHHHH....",
     "....HSSSSSSSSH....",
     "....SSSSSSSSSS....",
-    "...WSSESSSSESSs...",
+    "...sSSESSSSESSs...",
     "....SSSSSSSSSS....",
     "....SSSSssSSSS....",
     "....SSSMMMMSSS....",
@@ -78,13 +77,13 @@ WAVE_HAND = {
 }
 
 SIDE = [  # facing right
-    "....HHHHH.....",
-    "...HHhHHHHH...",
+    "....hhhhh.....",
+    "...HHHHHHHH...",
     "..HHHHHHHHHH..",
     "..HHHHHHHHHH..",
     "..HHHHHSSSSS..",
     "..HHHSSSSSES..",
-    "..HWSSSSSSSSS.",
+    "..HsSSSSSSSSS.",
     "..HSSSSSSSSS..",
     "...SSSSSSSSs..",
     "...SSSSSSMM...",
@@ -110,14 +109,14 @@ SIDE_ARM = {
 }
 
 BACK = [
-    ".....HHHHHH.....",
-    "....HHhHHhHH....",
-    "...HHHHHHHHHH...",
-    "...HHHHHHHHHH...",
-    "...HHHHHHhHHH...",
-    "..WHHHHHHHHHHS..",
-    "...HHHHHHHHHH...",
-    "....HHHHHHHH....",
+    ".....hhhhhh.....",  # rim-lit outline keeps the black hair visible against the screen
+    "....hHHHHHHh....",
+    "...hHHHHHHHHh...",
+    "...hHHHHHHHHh...",
+    "...hHHHHHHHHh...",
+    "..ShHHHHHHHHhS..",
+    "...hHHHHHHHHh...",
+    "....hHHHHHHh....",
     ".....SSSSSS.....",
     "...TTTTTTTTTT...",
     "..TTTTTTTTTTTT..",
@@ -212,8 +211,8 @@ def room() -> list[str]:
     for i, (x, w, c) in enumerate(books):
         shelf.append(rect(x, f - 24 + (i % 2), w - 1, 7 - (i % 2), fill=c))
         shelf.append(rect(x + 1, f - 15 + (i % 3 == 0), w - 1, 6 - (i % 3 == 0), fill=books[-1 - i][2]))
-    shelf += [rect(8, f - 17, 30, 1, fill="#2a313c"), rect(8, f - 8, 30, 1, fill="#2a313c"),
-              rect(11, f - 6, 6, 5, fill="#3fb950"), rect(12, f - 7, 4, 1, fill="#2ea043")]
+    shelf += [rect(8, f - 17, 30, 1, fill="#2a313c"), rect(8, f - 8, 30, 1, fill="#2a313c")]
+    shelf += catan(10, f - 7)
     return [
         rect(0, 0, GW, f, fill="#121821"),
         rect(0, f, GW, GH - f, fill="#0b0f15"),
@@ -227,6 +226,7 @@ def room() -> list[str]:
             rect(159, 14, 3, 3, fill=t["accent2"]), rect(166, 11, 3, 3, fill=t["accent2"]),
             rect(171, 11, 3, 3, fill=t["accent2"]),
         ], cls="neon"),
+        *lightsaber(44, f - 24),
         # plant
         rect(77, f - 6, 7, 6, fill="#5a3b2e"), rect(76, f - 7, 9, 1, fill="#6e4a3a"),
         rect(80, f - 15, 1, 8, fill="#2f6b3a"), rect(77, f - 13, 3, 2, fill="#3fb950"),
@@ -240,6 +240,32 @@ def room() -> list[str]:
         rect(114, f - 18, 4, 2, fill=t["border"]), rect(110, f - 17, 12, 1, fill=t["border"]),
         rect(138, f - 26, 11, 9, fill="#8b949e"), rect(139, f - 25, 9, 7, fill=t["panel"]),
         rect(136, f - 17, 15, 1, fill="#8b949e"),
+    ]
+
+
+def catan(x, y) -> list[str]:
+    """The Catan box lying on the shelf, spine facing out: red, yellow serif title."""
+    return [
+        rect(x, y, 26, 6, fill="#b3261e"),
+        rect(x, y, 26, 1, fill="#d0453a"),                # lit top edge
+        rect(x, y + 5, 26, 1, fill="#5e8c3a"),            # hills from the cover art
+        # inline style: the global `text` CSS rule would otherwise win over attributes
+        f'<text x="{x + 13}" y="{y + 4.4}" text-anchor="middle" style="font-family:Georgia,\'Times New Roman\',serif;'
+        f'font-size:4.6px;font-weight:700;letter-spacing:.25px;fill:#f6c945;stroke:#3a1a0a;stroke-width:.4px;'
+        f'paint-order:stroke">CATAN</text>',
+    ]
+
+
+def lightsaber(x, y) -> list[str]:
+    """A lightsaber on a wall mount, blade glowing."""
+    t = THEME
+    return [
+        rect(x + 1, y + 1, 2, 2, fill="#30363d"), rect(x + 26, y + 1, 2, 2, fill="#30363d"),  # brackets
+        rect(x, y, 7, 2, fill="#8b949e"), rect(x + 1, y, 1, 2, fill="#30363d"),               # hilt
+        rect(x + 3, y, 1, 2, fill="#30363d"), rect(x + 5, y, 1, 1, fill="#f85149"),
+        rect(x + 7, y, 2, 2, fill="#c9d1d9"),                                                  # emitter
+        g([rect(x + 9, y, 22, 2, fill=t["accent2"]), rect(x + 9, y + 0.5, 21.5, 1, fill="#e6f3ff")],
+          cls="saber"),
     ]
 
 
@@ -377,6 +403,8 @@ svg{{shape-rendering:crispEdges}}
 .tapl{{animation:tap .32s step-end infinite}}.tapr{{animation:tap .32s step-end -.16s infinite}}
 @keyframes tap{{50%{{transform:translateY(-1px)}}}}
 .ln{{transform-box:fill-box;transform-origin:left}}
+.saber{{filter:drop-shadow(0 0 1px {THEME['accent2']}) drop-shadow(0 0 2px #1f6feb);animation:hum 1.8s steps(6) infinite}}
+@keyframes hum{{0%,100%{{opacity:1}}40%{{opacity:.85}}55%{{opacity:1}}80%{{opacity:.92}}}}
 .neon{{filter:drop-shadow(0 0 1.2px {THEME['accent2']});animation:pulse 3s ease-in-out infinite}}
 .steam{{animation:steam 2.4s ease-out infinite both}}
 @keyframes steam{{0%{{transform:translateY(0);opacity:0}}25%{{opacity:.9}}100%{{transform:translateY(-7px);opacity:0}}}}
