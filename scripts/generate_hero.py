@@ -249,9 +249,9 @@ GROGU = [
 ]
 MANGA_COLORS = ["#e5534b", "#f0b72f", "#3fb950", "#79c0ff", "#d2a8ff", "#f778ba", "#ffa657"]
 TECH_BOOKS = [  # (title, width, spine, text), top to bottom
-    ("CLEAN CODE", 20, "#3d444d", "#e6edf3"),
-    ("CLEAN ARCHITECTURE", 23, "#2d333b", "#f0b72f"),
-    ("DOMAIN-DRIVEN DESIGN", 25, "#1d4f91", "#e6edf3"),
+    ("CLEAN CODE", 13, "#3d444d", "#e6edf3"),
+    ("CLEAN ARCHITECTURE", 15, "#2d333b", "#f0b72f"),
+    ("DOMAIN-DRIVEN DESIGN", 16, "#1d4f91", "#e6edf3"),
 ]
 
 
@@ -288,17 +288,19 @@ def bookshelf(x, f) -> list[str]:
     out.append(sprite(GROGU, x + 28, f - 24))
 
     # middle: the engineering books lying down, titles readable, and a Rubik's cube
-    y = f - 15.8
+    y = f - 14
     for title, w, spine, ink in TECH_BOOKS:
-        bx = x + 2 + (25 - w) // 2
-        out += [rect(bx, y, w, 2.5, fill=spine), rect(bx, y + 2.4, w, 0.1, fill="#0b0f15"),
-                label(bx + 1, y + 1.85, title, 1.7, ink, w - 2)]
-        y += 2.6
+        bx = x + 2 + (16 - w) / 2
+        out += [rect(bx, y, w, 2, fill=spine), rect(bx, y + 1.9, w, 0.1, fill="#0b0f15"),
+                label(bx + 0.7, y + 1.45, title, 1.35, ink, w - 1.4)]
+        y += 2.05
     cube = [["#e5534b", "#f0b72f", "#3fb950"], ["#79c0ff", "#e6edf3", "#ffa657"], ["#3fb950", "#e5534b", "#79c0ff"]]
-    cx, cy = x + 29, f - 13
+    cx, cy = x + 20, f - 13
     out.append(rect(cx, cy, 5, 5, fill="#0b0f15"))
     out += [rect(cx + 0.5 + c * 1.4, cy + 0.5 + r * 1.4, 1.2, 1.2, fill=cube[r][c]) for r in range(3) for c in range(3)]
-    out += [rect(x + 35, f - 15, 2, 7, fill="#2f6b3a"), rect(x + 37, f - 14, 2, 6, fill="#6e4a3a")]
+    out += [rect(x + 27, f - 15, 2, 7, fill="#2f6b3a"), rect(x + 29, f - 14, 2, 6, fill="#6e4a3a"),
+            rect(x + 31, f - 15, 2, 7, fill="#3d4250"), rect(x + 33, f - 14, 3, 6, fill="#2b3a55"),
+            rect(x + 36, f - 15, 2, 7, fill="#4a3b35")]
 
     # bottom: Catan, a Pokéball and a few more books
     out += catan(x + 2, f - 5)
