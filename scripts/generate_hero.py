@@ -37,6 +37,8 @@ PALETTE = {
     "E": "#1a1412", "M": "#8a4a3c",   # eyes, mouth
     "T": "#3d4250", "t": "#2d313b",   # dark grey t-shirt
     "P": "#2b3a55", "B": "#d0d7de",   # jeans, sneakers
+    "G": "#8fb573", "O": "#b08a5a", "o": "#8a6a42",   # Grogu: skin, robe
+    "K": "#111111",                                   # Grogu's eyes
 }
 
 FRONT = [
@@ -205,16 +207,7 @@ class Tracks:
 
 def room() -> list[str]:
     t, f = THEME, FLOOR
-    books = [(10, 4, "#3d4250"), (14, 3, "#2b3a55"), (17, 5, "#4a3b35"), (22, 3, "#2f6b3a"),
-             (25, 4, "#3d4250"), (29, 3, "#79c0ff"), (32, 5, "#2b3a55")]
-    shelf = [rect(8, f - 26, 30, 26, fill="#1c222b"), rect(9, f - 25, 28, 24, fill="#151a22")]
-    for i, (x, w, c) in enumerate(books):
-        shelf.append(rect(x, f - 24 + (i % 2), w - 1, 7 - (i % 2), fill=c))
-        shelf.append(rect(x + 1, f - 15 + (i % 3 == 0), w - 1, 6 - (i % 3 == 0), fill=books[-1 - i][2]))
-    shelf += [rect(8, f - 17, 30, 1, fill="#2a313c"), rect(8, f - 8, 30, 1, fill="#2a313c")]
-    shelf += catan(10, f - 5)
-    shelf += [rect(27, f - 7, 3, 6, fill="#4a3b35"), rect(30, f - 6, 3, 5, fill="#2b3a55"),
-              rect(33, f - 7, 3, 6, fill="#3d4250")]
+    shelf = bookshelf(6, f)
     return [
         rect(0, 0, GW, f, fill="#121821"),
         rect(0, f, GW, GH - f, fill="#0b0f15"),
@@ -243,6 +236,76 @@ def room() -> list[str]:
         rect(138, f - 26, 11, 9, fill="#8b949e"), rect(139, f - 25, 9, 7, fill=t["panel"]),
         rect(136, f - 17, 15, 1, fill="#8b949e"),
     ]
+
+
+GROGU = [
+    "GG.....GG",
+    ".GGGGGGG.",
+    "..GKGKG..",
+    "...GGG...",
+    "..oOOOo..",
+    "..OOOOO..",
+    "..OOOOO..",
+]
+MANGA_COLORS = ["#e5534b", "#f0b72f", "#3fb950", "#79c0ff", "#d2a8ff", "#f778ba", "#ffa657"]
+TECH_BOOKS = [  # (title, width, spine, text), top to bottom
+    ("CLEAN CODE", 20, "#3d444d", "#e6edf3"),
+    ("CLEAN ARCHITECTURE", 23, "#2d333b", "#f0b72f"),
+    ("DOMAIN-DRIVEN DESIGN", 25, "#1d4f91", "#e6edf3"),
+]
+
+
+def label(x, y, s, size, color, width) -> str:
+    """Small sans-serif title squeezed to an exact width (fonts differ between visitors)."""
+    return (f'<text x="{x}" y="{y}" textLength="{width}" lengthAdjust="spacingAndGlyphs" '
+            f'style="font-family:Arial,Helvetica,sans-serif;font-size:{size}px;font-weight:700;fill:{color}">'
+            f"{esc(s)}</text>")
+
+
+def pokeball(cx, cy, r) -> str:
+    """Drawn with vector shapes: at this size pixels can't make the band and button read."""
+    return (
+        f'<g style="shape-rendering:auto">'
+        f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#e6edf3"/>'
+        f'<path d="M{cx - r} {cy}a{r} {r} 0 0 1 {2 * r} 0z" fill="#e5534b"/>'
+        f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#0b0f15" stroke-width=".35"/>'
+        f'<rect x="{cx - r}" y="{cy - 0.25}" width="{2 * r}" height=".5" fill="#0b0f15"/>'
+        f'<circle cx="{cx}" cy="{cy}" r=".85" fill="#e6edf3" stroke="#0b0f15" stroke-width=".35"/>'
+        "</g>"
+    )
+
+
+def bookshelf(x, f) -> list[str]:
+    """Three shelves: manga + Grogu, engineering books + Rubik's cube, Catan + Pokéball."""
+    out = [rect(x, f - 26, 40, 26, fill="#1c222b"), rect(x + 1, f - 25, 38, 24, fill="#151a22"),
+           rect(x, f - 17, 40, 1, fill="#2a313c"), rect(x, f - 8, 40, 1, fill="#2a313c")]
+
+    # top: a manga collection, same design on every spine, then Grogu
+    for i in range(11):
+        mx = x + 2 + i * 2
+        out += [rect(mx, f - 24, 1.7, 7, fill="#dfe3e8"), rect(mx, f - 24, 1.7, 2, fill=MANGA_COLORS[i % 7]),
+                rect(mx + 0.4, f - 19, 0.9, 0.6, fill="#30363d")]  # volume number
+    out.append(sprite(GROGU, x + 28, f - 24))
+
+    # middle: the engineering books lying down, titles readable, and a Rubik's cube
+    y = f - 15.8
+    for title, w, spine, ink in TECH_BOOKS:
+        bx = x + 2 + (25 - w) // 2
+        out += [rect(bx, y, w, 2.5, fill=spine), rect(bx, y + 2.4, w, 0.1, fill="#0b0f15"),
+                label(bx + 1, y + 1.85, title, 1.7, ink, w - 2)]
+        y += 2.6
+    cube = [["#e5534b", "#f0b72f", "#3fb950"], ["#79c0ff", "#e6edf3", "#ffa657"], ["#3fb950", "#e5534b", "#79c0ff"]]
+    cx, cy = x + 29, f - 13
+    out.append(rect(cx, cy, 5, 5, fill="#0b0f15"))
+    out += [rect(cx + 0.5 + c * 1.4, cy + 0.5 + r * 1.4, 1.2, 1.2, fill=cube[r][c]) for r in range(3) for c in range(3)]
+    out += [rect(x + 35, f - 15, 2, 7, fill="#2f6b3a"), rect(x + 37, f - 14, 2, 6, fill="#6e4a3a")]
+
+    # bottom: Catan, a Pokéball and a few more books
+    out += catan(x + 2, f - 5)
+    out.append(pokeball(x + 22, f - 3.6, 2.6))
+    out += [rect(x + 26, f - 7, 3, 6, fill="#4a3b35"), rect(x + 29, f - 6, 3, 5, fill="#2b3a55"),
+            rect(x + 32, f - 7, 3, 6, fill="#3d4250"), rect(x + 35, f - 6, 3, 5, fill="#5a3b2e")]
+    return out
 
 
 def catan(x, y) -> list[str]:
