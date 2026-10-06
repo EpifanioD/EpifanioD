@@ -212,7 +212,9 @@ def room() -> list[str]:
         shelf.append(rect(x, f - 24 + (i % 2), w - 1, 7 - (i % 2), fill=c))
         shelf.append(rect(x + 1, f - 15 + (i % 3 == 0), w - 1, 6 - (i % 3 == 0), fill=books[-1 - i][2]))
     shelf += [rect(8, f - 17, 30, 1, fill="#2a313c"), rect(8, f - 8, 30, 1, fill="#2a313c")]
-    shelf += catan(10, f - 7)
+    shelf += catan(10, f - 5)
+    shelf += [rect(27, f - 7, 3, 6, fill="#4a3b35"), rect(30, f - 6, 3, 5, fill="#2b3a55"),
+              rect(33, f - 7, 3, 6, fill="#3d4250")]
     return [
         rect(0, 0, GW, f, fill="#121821"),
         rect(0, f, GW, GH - f, fill="#0b0f15"),
@@ -226,7 +228,7 @@ def room() -> list[str]:
             rect(159, 14, 3, 3, fill=t["accent2"]), rect(166, 11, 3, 3, fill=t["accent2"]),
             rect(171, 11, 3, 3, fill=t["accent2"]),
         ], cls="neon"),
-        *lightsaber(44, f - 24),
+        *lightsaber(101, 16),  # on the wall above the monitor
         # plant
         rect(77, f - 6, 7, 6, fill="#5a3b2e"), rect(76, f - 7, 9, 1, fill="#6e4a3a"),
         rect(80, f - 15, 1, 8, fill="#2f6b3a"), rect(77, f - 13, 3, 2, fill="#3fb950"),
@@ -244,14 +246,14 @@ def room() -> list[str]:
 
 
 def catan(x, y) -> list[str]:
-    """The Catan box lying on the shelf, spine facing out: red, yellow serif title."""
+    """The Catan box lying on the shelf, book-sized, spine facing out: red, yellow serif title."""
     return [
-        rect(x, y, 26, 6, fill="#b3261e"),
-        rect(x, y, 26, 1, fill="#d0453a"),                # lit top edge
-        rect(x, y + 5, 26, 1, fill="#5e8c3a"),            # hills from the cover art
+        rect(x, y, 15, 4, fill="#b3261e"),
+        rect(x, y, 15, 0.6, fill="#d0453a"),              # lit top edge
+        rect(x, y + 3.4, 15, 0.6, fill="#5e8c3a"),        # hills from the cover art
         # inline style: the global `text` CSS rule would otherwise win over attributes
-        f'<text x="{x + 13}" y="{y + 4.4}" text-anchor="middle" style="font-family:Georgia,\'Times New Roman\',serif;'
-        f'font-size:4.6px;font-weight:700;letter-spacing:.25px;fill:#f6c945;stroke:#3a1a0a;stroke-width:.4px;'
+        f'<text x="{x + 7.5}" y="{y + 2.9}" text-anchor="middle" style="font-family:Georgia,\'Times New Roman\',serif;'
+        f'font-size:3px;font-weight:700;letter-spacing:.1px;fill:#f6c945;stroke:#3a1a0a;stroke-width:.25px;'
         f'paint-order:stroke">CATAN</text>',
     ]
 
