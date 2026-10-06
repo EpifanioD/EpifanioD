@@ -1,8 +1,5 @@
-"""Regenerate every SVG in assets/. Pass --offline to reuse cached contribution data."""
-import sys
-
+"""Regenerate every SVG in assets/."""
 import generate_architecture
-import generate_contributions
 import generate_hero
 import generate_profile
 import generate_stack
@@ -17,5 +14,3 @@ save("profile.svg", generate_profile.build(content, pane_h))
 save("stack.svg", generate_stack.build(content, pane_h))
 
 save("architecture.svg", generate_architecture.build(content))
-data = generate_contributions.load(content["identity"]["github"], offline="--offline" in sys.argv)
-save("contributions.svg", generate_contributions.build(content, data))

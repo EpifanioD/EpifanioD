@@ -1,8 +1,6 @@
 name: Update Profile SVGs
 
 on:
-  schedule:
-    - cron: "30 3 * * *" # daily, away from the other workflows' 00:00
   workflow_dispatch:
   push:
     branches: [main]
@@ -37,7 +35,7 @@ jobs:
 
       - name: Commit changes
         run: |
-          git add assets data
+          git add assets
           if git diff --cached --quiet; then
             echo "Nothing changed."
             exit 0

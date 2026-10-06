@@ -6,15 +6,13 @@ The SVGs in `assets/` are rendered by these scripts. Python 3.11+ only, no depen
 content/profile.toml        what is shown (text, stack, architecture)
 scripts/svg.py              theme, fonts, CSS animations and drawing helpers
 scripts/generate_*.py       one script per SVG
-data/contributions.json     cached contribution data (written by the workflow)
 assets/*.svg                output, embedded by README.md
 ```
 
 ## Run locally
 
 ```bash
-python scripts/generate_all.py            # everything (fetches contributions)
-python scripts/generate_all.py --offline  # reuse data/contributions.json
+python scripts/generate_all.py            # everything
 python scripts/generate_hero.py           # or a single SVG
 ```
 
@@ -22,9 +20,9 @@ Open the files in `assets/` in a browser to watch the animations.
 
 ## Automation
 
-`.github/workflows/update-profile.yml` runs daily, on manual dispatch and whenever
-`content/` or `scripts/` change on `main`. It regenerates every SVG and commits only
-if something changed.
+`.github/workflows/update-profile.yml` runs on manual dispatch and whenever `content/` or
+`scripts/` change on `main`. It regenerates every SVG and commits only if something changed.
+The contribution snake comes from `snake.yml` (Platane/snk), published to the `output` branch.
 
 ## The hero scene
 

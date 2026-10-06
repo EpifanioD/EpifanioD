@@ -17,8 +17,14 @@
   <img src="./assets/architecture.svg" width="900" alt="Software architecture — layered diagram (clients, REST API, application, domain, data, events) with Modular Monolith, Microservices, Serverless, Event-Driven, Clean Architecture, SOLID, Design Patterns and DDD." />
 </p>
 
+<p align="center"><code>davi@github:~$ ./snake --eat-contributions</code></p>
+
 <p align="center">
-  <img src="./assets/contributions.svg" width="900" alt="GitHub contribution activity over the last year." />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake.svg" />
+    <img src="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake.svg" alt="Contribution snake" />
+  </picture>
 </p>
 
 <p align="center"><i>"Good software is not just code that works. It's code that can evolve."</i></p>
@@ -30,14 +36,6 @@
 <p align="center">
   <img src="./profile/stats.svg" height="170" alt="GitHub stats" />
   <img src="./profile/top-langs.svg" height="170" alt="Top languages" />
-</p>
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake.svg" />
-    <img src="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake.svg" alt="Contribution snake" />
-  </picture>
 </p>
 
 </details>

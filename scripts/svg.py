@@ -11,7 +11,6 @@ from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
-DATA = ROOT / "data"
 CONTENT = ROOT / "content" / "profile.toml"
 
 THEME = {
