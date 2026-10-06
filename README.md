@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/hero.svg" width="900" alt="Pixel-art loop: Davi comes in through the door, waves, codes next to a steaming coffee, turns the PC off and leaves — Davi Epifânio Maia · Software Engineer · Full Stack Developer · Software Architecture" />
+  <img src="https://raw.githubusercontent.com/EpifanioD/EpifanioD/main/assets/hero.svg?v=ba26ca0c" width="900" alt="Pixel-art loop: Davi comes in through the door, waves, codes next to a steaming coffee, turns the PC off and leaves — Davi Epifânio Maia · Software Engineer · Full Stack Developer · Software Architecture" />
 </p>
 
 <p align="center">
@@ -9,12 +9,12 @@
 </p>
 
 <p align="center">
-  <img src="./assets/profile.svg" width="49%" alt="whoami — Davi Epifânio Maia, Software Engineer and Full Stack Developer from Alagoas, Brazil. Systems Analysis and Development; postgraduate studies in Software Architecture and Software Engineering. Current focus: scalable architectures, AI-assisted development and MCP, cloud and DevOps, system design." />
-  <img src="./assets/stack.svg" width="49%" alt="Tech stack — TypeScript, JavaScript, Java, PHP, C#, SQL; Angular, React, React Native, Next.js; Node.js, NestJS, Spring Boot, Laravel, .NET; PostgreSQL, MySQL, Oracle, MongoDB, SQLite; Docker, GitHub Actions, Jenkins and more." />
+  <img src="https://raw.githubusercontent.com/EpifanioD/EpifanioD/main/assets/profile.svg?v=9fd0749f" width="49%" alt="whoami — Davi Epifânio Maia, Software Engineer and Full Stack Developer from Alagoas, Brazil. Systems Analysis and Development; postgraduate studies in Software Architecture and Software Engineering. Current focus: scalable architectures, AI-assisted development and MCP, cloud and DevOps, system design." />
+  <img src="https://raw.githubusercontent.com/EpifanioD/EpifanioD/main/assets/stack.svg?v=680084be" width="49%" alt="Tech stack — TypeScript, JavaScript, Java, PHP, C#, SQL; Angular, React, React Native, Next.js; Node.js, NestJS, Spring Boot, Laravel, .NET; PostgreSQL, MySQL, Oracle, MongoDB, SQLite; Docker, GitHub Actions, Jenkins and more." />
 </p>
 
 <p align="center">
-  <img src="./assets/architecture.svg" width="900" alt="Software architecture — layered diagram (clients, REST API, application, domain, data, events) with Modular Monolith, Microservices, Serverless, Event-Driven, Clean Architecture, SOLID, Design Patterns and DDD." />
+  <img src="https://raw.githubusercontent.com/EpifanioD/EpifanioD/main/assets/architecture.svg?v=1154495f" width="900" alt="Software architecture — layered diagram (clients, REST API, application, domain, data, events) with Modular Monolith, Microservices, Serverless, Event-Driven, Clean Architecture, SOLID, Design Patterns and DDD." />
 </p>
 
 <p align="center"><code>davi@github:~$ ./snake --eat-contributions</code></p>
