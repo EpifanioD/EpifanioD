@@ -1,0 +1,75 @@
+# Everything shown in the profile SVGs comes from this file.
+# Edit it, run `python scripts/generate_all.py` and commit.
+
+[identity]
+user = "davi"
+host = "github"
+github = "EpifanioD"
+name = "Davi Epifânio Maia"
+headline = [
+  "Software Engineer · Full Stack Developer",
+  "Software Architecture · Backend · Cloud · AI",
+]
+boot = [
+  "Software Engineering",
+  "Full Stack Development",
+  "Software Architecture",
+  "Backend",
+  "Frontend",
+  "DevOps & Cloud",
+  "AI-assisted Development",
+]
+
+[[whoami]]
+key = "name"
+value = "Davi Epifânio Maia"
+
+[[whoami]]
+key = "role"
+value = "Software Engineer · Full Stack Developer"
+
+[[whoami]]
+key = "location"
+value = "Alagoas, Brazil"
+
+[[whoami]]
+key = "degree"
+value = "Systems Analysis and Development"
+
+[[whoami]]
+key = "postgrad"
+value = ["Software Architecture", "Software Engineering"]
+
+[[whoami]]
+key = "focus"
+inline = true
+value = [
+  "Software Architecture",
+  "Backend Development",
+  "Full Stack Development",
+  "API Design",
+  "Clean Code",
+  "Scalable Systems",
+  "DevOps",
+  "AI-assisted Development",
+]
+
+[stack]
+languages = ["TypeScript", "JavaScript", "Java", "PHP", "C#", "SQL"]
+frontend = ["Angular", "React", "React Native", "Next.js", "HTML5", "CSS3"]
+backend = ["Node.js", "NestJS", "Spring Boot", "Laravel", ".NET"]
+databases = ["PostgreSQL", "MySQL", "Oracle", "MongoDB", "SQLite"]
+devops = [
+  "Docker", "Docker Compose", "GitHub Actions", "Jenkins", "SonarQube",
+  "Nginx", "Apache", "Linux", "Ubuntu", "WSL",
+]
+tooling = [
+  "Git", "GitHub", "Maven", "npm", "Yarn", "NVM",
+  "Postman", "Insomnia", "Swagger",
+]
+workflow = ["Jira", "Confluence", "Slack", "VS Code", "IntelliJ IDEA", "Claude"]
+
+[architecture]
+styles = ["Modular Monolith", "Microservices", "Serverless", "Event-Driven"]
+principles = ["Clean Architecture", "SOLID", "Design Patterns", "Domain-Driven Design"]
+motto = "maintainable, scalable and easy to evolve"
