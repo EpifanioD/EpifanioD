@@ -12,7 +12,7 @@ assets/*.svg                output, embedded by README.md
 ## Run locally
 
 ```bash
-python scripts/generate_all.py            # everything
+python scripts/generate_all.py            # everything, and bumps image versions in README.md
 python scripts/generate_hero.py           # or a single SVG
 ```
 
@@ -39,5 +39,7 @@ file; every group follows a CSS keyframe track over the same cycle, so it loops 
 - Fonts can't be loaded inside an `<img>`, so text uses the visitor's system monospace font.
   Layout assumes ~0.6em per character.
 - Visitors with *reduced motion* enabled get the final, static frame (seated, coding, PC on).
+- README.md links each SVG by absolute URL with `?v=<content hash>`, so visitors never see a
+  cached old version after an update; `generate_all.py` keeps the hashes current.
 - `profile.svg` and `stack.svg` are half-width panes shown side by side; `generate_all.py`
   gives both the height of the taller one.
