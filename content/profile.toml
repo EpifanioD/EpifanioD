@@ -73,3 +73,12 @@ workflow = ["Jira", "Confluence", "Slack", "VS Code", "IntelliJ IDEA", "Claude"]
 styles = ["Modular Monolith", "Microservices", "Serverless", "Event-Driven"]
 principles = ["Clean Architecture", "SOLID", "Design Patterns", "Domain-Driven Design"]
 motto = "maintainable, scalable and easy to evolve"
+
+[focus]
+items = [
+  "Designing scalable software architectures",
+  "Building personal and professional projects",
+  "Exploring AI-assisted development, AI integrations and MCP",
+  "Improving cloud and DevOps practices",
+  "Continuously improving system design skills",
+]

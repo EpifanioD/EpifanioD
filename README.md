@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/hero.svg" width="900" alt="davi@github:~$ ./profile — Davi Epifânio Maia · Software Engineer · Full Stack Developer · Software Architecture" />
+  <img src="./assets/hero.svg" width="900" alt="Pixel-art Davi waves hello, walks to the desk and starts coding — Davi Epifânio Maia · Software Engineer · Full Stack Developer · Software Architecture" />
 </p>
 
 <p align="center">
@@ -9,11 +9,8 @@
 </p>
 
 <p align="center">
-  <img src="./assets/profile.svg" width="900" alt="whoami — Davi Epifânio Maia, Software Engineer and Full Stack Developer from Alagoas, Brazil. Systems Analysis and Development; postgraduate studies in Software Architecture and Software Engineering." />
-</p>
-
-<p align="center">
-  <img src="./assets/stack.svg" width="900" alt="Tech stack — TypeScript, JavaScript, Java, PHP, C#, SQL; Angular, React, React Native, Next.js; Node.js, NestJS, Spring Boot, Laravel, .NET; PostgreSQL, MySQL, Oracle, MongoDB, SQLite; Docker, GitHub Actions, Jenkins and more." />
+  <img src="./assets/profile.svg" width="49%" alt="whoami — Davi Epifânio Maia, Software Engineer and Full Stack Developer from Alagoas, Brazil. Systems Analysis and Development; postgraduate studies in Software Architecture and Software Engineering. Current focus: scalable architectures, AI-assisted development and MCP, cloud and DevOps, system design." />
+  <img src="./assets/stack.svg" width="49%" alt="Tech stack — TypeScript, JavaScript, Java, PHP, C#, SQL; Angular, React, React Native, Next.js; Node.js, NestJS, Spring Boot, Laravel, .NET; PostgreSQL, MySQL, Oracle, MongoDB, SQLite; Docker, GitHub Actions, Jenkins and more." />
 </p>
 
 <p align="center">
@@ -24,15 +21,7 @@
   <img src="./assets/contributions.svg" width="900" alt="GitHub contribution activity over the last year." />
 </p>
 
-### `davi@github:~$ ./current-focus`
-
-- Designing scalable software architectures
-- Building personal and professional projects
-- Exploring AI-assisted software development, AI integrations and MCP
-- Improving cloud and DevOps practices
-- Continuously improving system design skills
-
-> *"Good software is not just code that works. It's code that can evolve."*
+<p align="center"><i>"Good software is not just code that works. It's code that can evolve."</i></p>
 
 <details>
 <summary><code>davi@github:~$ ls ./extras</code></summary>

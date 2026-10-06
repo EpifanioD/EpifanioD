@@ -10,8 +10,12 @@ from svg import load_content, save
 
 content = load_content()
 save("hero.svg", generate_hero.build(content))
-save("profile.svg", generate_profile.build(content))
-save("stack.svg", generate_stack.build(content))
+
+# side-by-side panes share the taller one's height
+pane_h = max(generate_profile.layout(content)[1], generate_stack.layout(content)[1])
+save("profile.svg", generate_profile.build(content, pane_h))
+save("stack.svg", generate_stack.build(content, pane_h))
+
 save("architecture.svg", generate_architecture.build(content))
 data = generate_contributions.load(content["identity"]["github"], offline="--offline" in sys.argv)
 save("contributions.svg", generate_contributions.build(content, data))

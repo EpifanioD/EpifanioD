@@ -26,10 +26,20 @@ Open the files in `assets/` in a browser to watch the animations.
 `content/` or `scripts/` change on `main`. It regenerates every SVG and commits only
 if something changed.
 
+## The hero scene
+
+`generate_hero.py` draws a pixel-art room on a 180×72 grid (5 px per unit). Sprites are
+lists of strings, one character per pixel (`H` hair, `S` skin, `T` t-shirt, `.` transparent);
+colors were sampled from the GitHub avatar. Three groups (waving, walking, seated) are
+switched on and off by CSS animations on a timeline, and the code on the monitor types
+itself in a loop.
+
 ## Notes
 
 - Animations are CSS inside each SVG (`fade`, `type`, `blink`, `draw`, `pulse`) plus one SMIL
   `animateMotion`. No JavaScript, which GitHub would strip.
 - Fonts can't be loaded inside an `<img>`, so text uses the visitor's system monospace font.
   Layout assumes ~0.6em per character.
-- Visitors with *reduced motion* enabled get the final, static frame.
+- Visitors with *reduced motion* enabled get the final, static frame (seated, coding).
+- `profile.svg` and `stack.svg` are half-width panes shown side by side; `generate_all.py`
+  gives both the height of the taller one.
