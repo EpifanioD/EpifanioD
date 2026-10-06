@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/hero.svg" width="900" alt="davi@github:~$ ./profile — Davi Epifânio Maia · Software Engineer · Full Stack Developer · Software Architecture" />
+  <img src="./assets/hero.svg" width="900" alt="Pixel-art loop: Davi comes in through the door, waves, codes next to a steaming coffee, turns the PC off and leaves — Davi Epifânio Maia · Software Engineer · Full Stack Developer · Software Architecture" />
 </p>
 
 <p align="center">
@@ -9,30 +9,25 @@
 </p>
 
 <p align="center">
-  <img src="./assets/profile.svg" width="900" alt="whoami — Davi Epifânio Maia, Software Engineer and Full Stack Developer from Alagoas, Brazil. Systems Analysis and Development; postgraduate studies in Software Architecture and Software Engineering." />
-</p>
-
-<p align="center">
-  <img src="./assets/stack.svg" width="900" alt="Tech stack — TypeScript, JavaScript, Java, PHP, C#, SQL; Angular, React, React Native, Next.js; Node.js, NestJS, Spring Boot, Laravel, .NET; PostgreSQL, MySQL, Oracle, MongoDB, SQLite; Docker, GitHub Actions, Jenkins and more." />
+  <img src="./assets/profile.svg" width="49%" alt="whoami — Davi Epifânio Maia, Software Engineer and Full Stack Developer from Alagoas, Brazil. Systems Analysis and Development; postgraduate studies in Software Architecture and Software Engineering. Current focus: scalable architectures, AI-assisted development and MCP, cloud and DevOps, system design." />
+  <img src="./assets/stack.svg" width="49%" alt="Tech stack — TypeScript, JavaScript, Java, PHP, C#, SQL; Angular, React, React Native, Next.js; Node.js, NestJS, Spring Boot, Laravel, .NET; PostgreSQL, MySQL, Oracle, MongoDB, SQLite; Docker, GitHub Actions, Jenkins and more." />
 </p>
 
 <p align="center">
   <img src="./assets/architecture.svg" width="900" alt="Software architecture — layered diagram (clients, REST API, application, domain, data, events) with Modular Monolith, Microservices, Serverless, Event-Driven, Clean Architecture, SOLID, Design Patterns and DDD." />
 </p>
 
+<p align="center"><code>davi@github:~$ ./snake --eat-contributions</code></p>
+
 <p align="center">
-  <img src="./assets/contributions.svg" width="900" alt="GitHub contribution activity over the last year." />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake.svg" />
+    <img src="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake.svg" alt="Contribution snake" />
+  </picture>
 </p>
 
-### `davi@github:~$ ./current-focus`
-
-- Designing scalable software architectures
-- Building personal and professional projects
-- Exploring AI-assisted software development, AI integrations and MCP
-- Improving cloud and DevOps practices
-- Continuously improving system design skills
-
-> *"Good software is not just code that works. It's code that can evolve."*
+<p align="center"><i>"Good software is not just code that works. It's code that can evolve."</i></p>
 
 <details>
 <summary><code>davi@github:~$ ls ./extras</code></summary>
@@ -41,14 +36,6 @@
 <p align="center">
   <img src="./profile/stats.svg" height="170" alt="GitHub stats" />
   <img src="./profile/top-langs.svg" height="170" alt="Top languages" />
-</p>
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake.svg" />
-    <img src="https://raw.githubusercontent.com/EpifanioD/EpifanioD/output/github-snake.svg" alt="Contribution snake" />
-  </picture>
 </p>
 
 </details>
