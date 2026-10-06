@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/hero.svg" width="900" alt="Pixel-art Davi waves hello, walks to the desk and starts coding — Davi Epifânio Maia · Software Engineer · Full Stack Developer · Software Architecture" />
+  <img src="./assets/hero.svg" width="900" alt="Pixel-art loop: Davi comes in through the door, waves, codes next to a steaming coffee, turns the PC off and leaves — Davi Epifânio Maia · Software Engineer · Full Stack Developer · Software Architecture" />
 </p>
 
 <p align="center">

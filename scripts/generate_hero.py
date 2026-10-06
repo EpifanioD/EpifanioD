@@ -1,8 +1,12 @@
-"""assets/hero.svg: pixel-art scene. Davi waves, walks to the desk, sits down and codes.
+"""assets/hero.svg: pixel-art scene, played in a loop.
 
-The scene is drawn on a grid (1 unit = PX screen pixels). Sprites are strings where
-each character is a palette color and "." is transparent. States (waving, walking,
-seated) are separate groups switched on and off by CSS animations over a timeline.
+Davi opens the door, waves, walks to the desk and sits down; the PC turns on and code
+gets typed next to a steaming coffee. After a while the PC turns off, Davi walks back,
+waves goodbye and leaves. The room stays empty for a moment and the story restarts.
+
+The scene is drawn on a grid (1 unit = PX screen pixels). Sprites are strings where each
+character is a palette color and "." is transparent. Every moving part follows a CSS
+keyframe track over the same CYCLE, so the whole story loops in sync.
 """
 from svg import THEME, document, esc, load_content, rect, save, spans, text
 
@@ -10,6 +14,22 @@ W, H = 900, 360
 PX = 5                      # screen pixels per grid unit
 GW, GH = W // PX, H // PX   # 180 x 72 grid
 FLOOR = 64
+CYCLE = 28.0                # seconds for the whole story
+
+# story timeline (seconds)
+DOOR_OPEN_IN = (0.6, 3.6)
+WAVE_IN = (1.0, 3.2)
+HELLO = (1.2, 3.2)
+WALK_IN = (3.2, 6.2)
+SEATED = (6.2, 19.0)
+PC_ON = (6.6, 18.6)
+WALK_OUT = (19.0, 22.0)
+DOOR_OPEN_OUT = (21.6, 24.2)
+WAVE_OUT = (22.0, 23.6)
+BYE = (22.2, 23.6)
+
+DOOR_X = 158   # where Davi enters and leaves
+SEAT_X = 104   # where the walk ends, next to the chair
 
 PALETTE = {
     "H": "#241c1a", "h": "#3b2e29",   # hair, highlight
@@ -49,16 +69,15 @@ FRONT = [
     ".....PPP..PPP.....",
     "....BBBB..BBBB....",
 ]
-
-# raised right arm for the wave, two hand positions
-WAVE_ARM = [(15, 14, "T"), (14, 14, "T"), (14, 15, "T"), (13, 15, "S"), (12, 15, "S"), (12, 16, "S"),
-            (11, 16, "S"), (10, 16, "S")]
+# raised left arm (on the open side of the door) and two hand positions
+WAVE_ARM = [(15, 3, "T"), (14, 3, "T"), (14, 2, "T"), (13, 2, "S"), (12, 2, "S"), (12, 1, "S"),
+            (11, 1, "S"), (10, 1, "S")]
 WAVE_HAND = {
-    "a": [(9, 16), (9, 17), (8, 16), (8, 17), (7, 16), (7, 17)],
-    "b": [(9, 15), (9, 16), (8, 15), (8, 14), (7, 14), (7, 15)],
+    "a": [(9, 1), (9, 0), (8, 1), (8, 0), (7, 1), (7, 0)],
+    "b": [(9, 2), (9, 1), (8, 2), (8, 3), (7, 3), (7, 2)],
 }
 
-SIDE = [
+SIDE = [  # facing right
     "....HHHHH.....",
     "...HHhHHHHH...",
     "..HHHHHHHHHH..",
@@ -122,16 +141,10 @@ CODE = [
     (0, [(1, "pn")]),
 ]
 CODE_COLORS = {"kw": THEME["accent2"], "id": THEME["text"], "st": THEME["accent"], "pn": THEME["muted"]}
+CODE_LOOP = 6.0
 
-# timeline (seconds)
-T_WAVE_END = 3.0
-T_WALK_END = 5.8
-T_CODE = 6.1
-CODE_CYCLE = 7.0
 
-START_X = 40   # where Davi waves
-DESK_X = 112   # where the walk ends
-
+# ---- drawing helpers -------------------------------------------------------
 
 def put(grid_rows, pixels, char=None):
     rows = [list(r) for r in grid_rows]
@@ -147,8 +160,7 @@ def sprite(rows, x=0, y=0) -> str:
     for r, row in enumerate(rows):
         c = 0
         while c < len(row):
-            ch = row[c]
-            run = 1
+            ch, run = row[c], 1
             while c + run < len(row) and row[c + run] == ch:
                 run += 1
             if ch != ".":
@@ -162,22 +174,51 @@ def g(children, cls=None, style=None, transform=None) -> str:
     return f"<g{a}>{''.join(children)}</g>"
 
 
-def window(t_on=None, t_off=None) -> str:
-    """CSS that shows a group only between t_on and t_off."""
-    parts = []
-    if t_on is not None:
-        parts.append(f"on .01s {t_on:.2f}s both")
-    if t_off is not None:
-        parts.append(f"off .01s {t_off:.2f}s forwards")
-    return "animation:" + ",".join(parts)
+def pct(t: float) -> str:
+    return f"{t / CYCLE * 100:.2f}%"
 
+
+class Tracks:
+    """Collects CSS keyframes that all loop over CYCLE."""
+
+    def __init__(self):
+        self.css = []
+
+    def visible(self, name, *windows) -> str:
+        """Opacity 1 inside the (start, end) windows, 0 elsewhere."""
+        frames = ["0%{opacity:0}"]
+        for start, end in windows:
+            frames += [f"{pct(start)}{{opacity:1}}", f"{pct(end)}{{opacity:0}}"]
+        frames.append("100%{opacity:0}")
+        self.css.append(f"@keyframes {name}{{{''.join(frames)}}}")
+        return f"animation:{name} {CYCLE}s step-end infinite"
+
+    def move(self, name, start, end, dx) -> str:
+        """translateX from 0 to dx between start and end."""
+        self.css.append(
+            f"@keyframes {name}{{0%,{pct(start)}{{transform:translateX(0)}}"
+            f"{pct(end)},100%{{transform:translateX({dx}px)}}}}"
+        )
+        return f"animation:{name} {CYCLE}s linear infinite"
+
+
+# ---- scene parts -----------------------------------------------------------
 
 def room() -> list[str]:
     t, f = THEME, FLOOR
-    out = [
+    books = [(10, 4, "#3d4250"), (14, 3, "#2b3a55"), (17, 5, "#4a3b35"), (22, 3, "#2f6b3a"),
+             (25, 4, "#3d4250"), (29, 3, "#79c0ff"), (32, 5, "#2b3a55")]
+    shelf = [rect(8, f - 26, 30, 26, fill="#1c222b"), rect(9, f - 25, 28, 24, fill="#151a22")]
+    for i, (x, w, c) in enumerate(books):
+        shelf.append(rect(x, f - 24 + (i % 2), w - 1, 7 - (i % 2), fill=c))
+        shelf.append(rect(x + 1, f - 15 + (i % 3 == 0), w - 1, 6 - (i % 3 == 0), fill=books[-1 - i][2]))
+    shelf += [rect(8, f - 17, 30, 1, fill="#2a313c"), rect(8, f - 8, 30, 1, fill="#2a313c"),
+              rect(11, f - 6, 6, 5, fill="#3fb950"), rect(12, f - 7, 4, 1, fill="#2ea043")]
+    return [
         rect(0, 0, GW, f, fill="#121821"),
         rect(0, f, GW, GH - f, fill="#0b0f15"),
         rect(0, f, GW, 1, fill=t["border"]),
+        *shelf,
         # neon circuit sign (like the one on the wall in the photo)
         g([
             rect(160, 8, 1, 7, fill=t["accent2"]), rect(160, 8, 8, 1, fill=t["accent2"]),
@@ -187,99 +228,137 @@ def room() -> list[str]:
             rect(171, 11, 3, 3, fill=t["accent2"]),
         ], cls="neon"),
         # plant
-        rect(99, f - 6, 7, 6, fill="#5a3b2e"), rect(98, f - 7, 9, 1, fill="#6e4a3a"),
-        rect(102, f - 15, 1, 8, fill="#2f6b3a"), rect(99, f - 13, 3, 2, fill="#3fb950"),
-        rect(103, f - 12, 3, 2, fill="#2ea043"), rect(100, f - 10, 2, 2, fill="#2ea043"),
-        rect(103, f - 16, 2, 2, fill="#3fb950"), rect(104, f - 9, 2, 2, fill="#3fb950"),
+        rect(77, f - 6, 7, 6, fill="#5a3b2e"), rect(76, f - 7, 9, 1, fill="#6e4a3a"),
+        rect(80, f - 15, 1, 8, fill="#2f6b3a"), rect(77, f - 13, 3, 2, fill="#3fb950"),
+        rect(81, f - 12, 3, 2, fill="#2ea043"), rect(78, f - 10, 2, 2, fill="#2ea043"),
+        rect(81, f - 16, 2, 2, fill="#3fb950"), rect(82, f - 9, 2, 2, fill="#3fb950"),
         # desk
-        rect(108, f - 16, 66, 2, fill="#3a3f4a"), rect(108, f - 14, 66, 1, fill="#262b33"),
-        rect(110, f - 13, 2, 13, fill="#262b33"), rect(170, f - 13, 2, 13, fill="#262b33"),
-        # monitor
-        rect(116, f - 41, 38, 23, fill=t["border"]),
-        rect(117, f - 40, 36, 21, fill="#090c10"),
-        rect(133, f - 18, 4, 2, fill=t["border"]), rect(129, f - 17, 12, 1, fill=t["border"]),
-        # laptop
-        rect(158, f - 26, 11, 9, fill="#8b949e"), rect(159, f - 25, 9, 7, fill=t["panel"]),
-        rect(156, f - 17, 15, 1, fill="#8b949e"),
-        g([rect(160, f - 24, 5, 1, fill=t["accent2"]), rect(162, f - 22, 5, 1, fill=t["muted"]),
-           rect(160, f - 20, 4, 1, fill=t["accent2"])], cls="chat"),
+        rect(89, f - 16, 64, 2, fill="#3a3f4a"), rect(89, f - 14, 64, 1, fill="#262b33"),
+        rect(91, f - 13, 2, 13, fill="#262b33"), rect(149, f - 13, 2, 13, fill="#262b33"),
+        # monitor (off screen) and laptop
+        rect(97, f - 41, 38, 23, fill=t["border"]), rect(98, f - 40, 36, 21, fill="#090c10"),
+        rect(114, f - 18, 4, 2, fill=t["border"]), rect(110, f - 17, 12, 1, fill=t["border"]),
+        rect(138, f - 26, 11, 9, fill="#8b949e"), rect(139, f - 25, 9, 7, fill=t["panel"]),
+        rect(136, f - 17, 15, 1, fill="#8b949e"),
     ]
-    return out
 
 
-def code_screen() -> tuple[list[str], str]:
-    """Code lines typed on the monitor in a loop; returns elements and their keyframes."""
-    x0, y0 = 119, FLOOR - 38
-    out, css = [], []
-    n = len(CODE)
+def coffee() -> list[str]:
+    f = FLOOR
+    mug = [rect(92, f - 21, 4, 5, fill="#d0d7de"), rect(93, f - 21, 2, 1, fill="#6f4e37"),
+           rect(91, f - 20, 1, 3, fill="#d0d7de")]
+    # wisps rising from the cup, each a tiny zig-zag starting at a different moment
+    steam = [
+        g([rect(x, f - 23, 1, 1, fill="#c9d1d9"), rect(x + 1, f - 24, 1, 1, fill="#c9d1d9"),
+           rect(x, f - 25, 1, 1, fill="#c9d1d9")], cls="steam", style=f"animation-delay:{d}s")
+        for x, d in ((92, 0), (94, 0.8), (93, 1.6))
+    ]
+    return mug + steam
+
+
+def screen(tracks: Tracks) -> str:
+    """Monitor and laptop contents, visible only while the PC is on."""
+    x0, y0 = 100, FLOOR - 38
+    parts, f = [], FLOOR
     for i, (indent, segs) in enumerate(CODE):
-        x = x0 + indent
-        bars = []
+        x, bars = x0 + indent, []
         for w, color in segs:
             bars.append(rect(x, y0 + i * 2, w, 1, fill=CODE_COLORS[color]))
             x += w + 1
-        a = i * 0.55 / CODE_CYCLE * 100
-        b = (i * 0.55 + 0.4) / CODE_CYCLE * 100
-        css.append(f"@keyframes l{i}{{0%,{a:.1f}%{{transform:scaleX(0)}}{b:.1f}%,92%{{transform:scaleX(1)}}"
-                   f"96%,100%{{transform:scaleX(0)}}}}")
-        out.append(g(bars, cls="ln", style=f"animation:l{i} {CODE_CYCLE}s linear {T_CODE}s infinite both"))
-    cursor_y = y0 + n * 2
-    out.append(rect(x0, cursor_y, 2, 1, fill=THEME["text"], class_="blink"))
-    return out, "".join(css)
+        a = i * 0.5 / CODE_LOOP * 100
+        b = (i * 0.5 + 0.35) / CODE_LOOP * 100
+        tracks.css.append(f"@keyframes l{i}{{0%,{a:.1f}%{{transform:scaleX(0)}}{b:.1f}%,92%{{transform:scaleX(1)}}"
+                          f"96%,100%{{transform:scaleX(0)}}}}")
+        parts.append(g(bars, cls="ln", style=f"animation:l{i} {CODE_LOOP}s linear infinite both"))
+    parts.append(rect(x0, y0 + len(CODE) * 2, 2, 1, fill=THEME["text"], class_="blink"))
+    parts += [
+        rect(133, f - 19, 1, 1, fill=THEME["accent"]),  # power led
+        rect(140, f - 24, 5, 1, fill=THEME["accent2"]), rect(142, f - 22, 5, 1, fill=THEME["muted"]),
+        rect(140, f - 20, 4, 1, fill=THEME["accent2"]),
+    ]
+    return g(parts, cls="pc", style=tracks.visible("pc", PC_ON))
 
 
-def waving() -> str:
-    base = put(FRONT, [(r, c, ".") for r in (17, 18, 19) for c in (13, 14)])
+def door(tracks: Tracks) -> list[str]:
+    f, x = FLOOR, DOOR_X
+    frame = rect(x - 1, f - 35, 21, 35, fill="#1c222b")
+    closed = g([
+        rect(x, f - 34, 19, 34, fill="#2a2f38"),
+        rect(x + 2, f - 32, 15, 13, fill="#242931"), rect(x + 2, f - 16, 15, 14, fill="#242931"),
+        rect(x + 3, f - 18, 2, 2, fill="#d29922"),
+    ])
+    opened = g([
+        rect(x, f - 34, 19, 34, fill="#06080b"),
+        rect(x + 16, f - 34, 3, 34, fill="#2a2f38"), rect(x + 16, f - 18, 1, 2, fill="#d29922"),
+    ], cls="door-open", style=tracks.visible("door", DOOR_OPEN_IN, DOOR_OPEN_OUT))
+    return [frame, closed, opened]
+
+
+def front_wave(tracks: Tracks, name, window) -> str:
+    base = put(FRONT, [(r, c, ".") for r in (17, 18, 19) for c in (3, 4)])
     base = put(base, WAVE_ARM)
     frames = [g([sprite(put(base, WAVE_HAND[k], "S"))], cls=f"f{k}", style="animation-duration:.6s")
               for k in ("a", "b")]
-    return g(frames, cls="st-wave", style=window(None, T_WAVE_END), transform=f"translate({START_X} {FLOOR - 27})")
+    return g([g(frames, transform=f"translate({DOOR_X} {FLOOR - 27})")], cls="away",
+             style=tracks.visible(name, window))
 
 
-def walking() -> tuple[str, str]:
+def walk(tracks: Tracks, name, window, x_from, x_to) -> str:
+    facing_left = x_to < x_from
     frames = []
     for k in ("a", "b"):
         rows = put(SIDE + SIDE_LEGS[k], SIDE_ARM[k])
         frames.append(g([sprite(rows)], cls=f"f{k}", style="animation-duration:.4s"))
-    dist = DESK_X - START_X
-    inner = g(frames, style=f"animation:walk {T_WALK_END - T_WAVE_END:.2f}s linear {T_WAVE_END:.2f}s both")
-    css_walk = f"@keyframes walk{{from{{transform:translateX(0)}}to{{transform:translateX({dist}px)}}}}"
-    return g([inner], cls="st-walk", style=window(T_WAVE_END, T_WALK_END),
-             transform=f"translate({START_X + 2} {FLOOR - 26})"), css_walk
+    body = g(frames, transform="translate(14 0) scale(-1 1)" if facing_left else None)
+    mover = g([body], style=tracks.move(f"{name}m", *window, x_to - x_from))
+    return g([g([mover], transform=f"translate({x_from} {FLOOR - 26})")], cls="away",
+             style=tracks.visible(name, window))
 
 
-def seated() -> str:
+def seated(tracks: Tracks) -> str:
     f = FLOOR
     arms = [g([sprite(put(["." * 16] * 15, BACK_ARMS[k], "S"))], cls=f"tap{k}") for k in ("l", "r")]
-    person = g([sprite(BACK)] + arms, transform=f"translate(127 {f - 28})")
-    chair = [
-        rect(129, f - 16, 12, 10, fill="#1f242c"), rect(130, f - 15, 10, 8, fill="#2a303a"),
-        rect(126, f - 8, 18, 2, fill="#1f242c"), rect(134, f - 6, 2, 3, fill="#1f242c"),
-        rect(128, f - 3, 14, 1, fill="#1f242c"),
-        rect(128, f - 2, 2, 2, fill=THEME["dim"]), rect(140, f - 2, 2, 2, fill=THEME["dim"]),
+    person = g([sprite(BACK)] + arms, transform=f"translate(108 {f - 28})")
+    return g([person], cls="seated", style=tracks.visible("seated", SEATED))
+
+
+def chair() -> list[str]:
+    f = FLOOR
+    return [
+        rect(110, f - 16, 12, 10, fill="#1f242c"), rect(111, f - 15, 10, 8, fill="#2a303a"),
+        rect(107, f - 8, 18, 2, fill="#1f242c"), rect(115, f - 6, 2, 3, fill="#1f242c"),
+        rect(109, f - 3, 14, 1, fill="#1f242c"),
+        rect(109, f - 2, 2, 2, fill=THEME["dim"]), rect(121, f - 2, 2, 2, fill=THEME["dim"]),
     ]
-    return g([person] + chair, cls="st-sit", style=window(T_WALK_END, None))
 
 
-def bubble() -> str:
-    # to the right of the head, tail pointing back at it
-    x, y = (START_X + 20) * PX, (FLOOR - 27) * PX - 4
-    msg = "hello, world!"
-    w = len(msg) * 13 * 0.6 + 22
+def bubble(tracks: Tracks, name, window, msg) -> str:
+    """Speech bubble above the doorway, tail pointing down at the head."""
     t = THEME
+    w = len(msg) * 13 * 0.6 + 22
+    x, y = W - 18 - w, (FLOOR - 27) * PX - 42
+    tail_x = (DOOR_X + 9) * PX
     return g([
-        f'<path d="M{x} {y + 9}l-9 6l9 3z" fill="{t["panel"]}" stroke="{t["accent"]}"/>',
+        f'<path d="M{tail_x - 6} {y + 27}l2 10l8 -10z" fill="{t["panel"]}" stroke="{t["accent"]}"/>',
         rect(x, y, w, 28, rx=4, fill=t["panel"], stroke=t["accent"]),
-        rect(x - 0.5, y + 10, 2, 7, fill=t["panel"]),
+        rect(tail_x - 5, y + 26, 8, 3, fill=t["panel"]),
         text(x + 11, y + 19, msg, "a", font_size=13),
-    ], cls="bubble", style=window(0.6, T_WAVE_END - 0.3))
+    ], cls="bubble", style=tracks.visible(name, window))
 
 
 def build(content: dict) -> str:
     ident = content["identity"]
-    screen, code_css = code_screen()
-    walk, walk_css = walking()
-    scene = g(room() + screen + [waving(), walk, seated()], transform=f"scale({PX})")
+    tr = Tracks()
+    scene = g(
+        room() + coffee() + [screen(tr)] + door(tr) + [
+            front_wave(tr, "hi", WAVE_IN),
+            walk(tr, "win", WALK_IN, DOOR_X + 2, SEAT_X),
+            seated(tr),
+            walk(tr, "wout", WALK_OUT, SEAT_X, DOOR_X + 2),
+            front_wave(tr, "bye", WAVE_OUT),
+        ] + chair(),
+        transform=f"scale({PX})",
+    )
 
     head = f"{ident['user']}@{ident['host']}"
     overlay = [
@@ -287,27 +366,29 @@ def build(content: dict) -> str:
         text(32, 92, ident["name"].upper(), font_size=32, font_weight=700, letter_spacing=1),
         rect(32, 106, 64, 3, fill=THEME["accent"]),
         *(text(32, 138 + i * 22, line, "m", font_size=15) for i, line in enumerate(ident["headline"])),
-        bubble(),
+        bubble(tr, "hello", HELLO, "hello, world!"),
+        bubble(tr, "seeyou", BYE, "see you!"),
     ]
 
     css = f"""
-svg{{shape-rendering:crispEdges}}text{{shape-rendering:auto}}
-@keyframes on{{from{{opacity:0}}to{{opacity:1}}}}@keyframes off{{from,to{{opacity:0}}}}
+svg{{shape-rendering:crispEdges}}
 .fa{{animation:fa .6s step-end infinite}}.fb{{animation:fb .6s step-end infinite}}
 @keyframes fa{{50%{{opacity:0}}}}@keyframes fb{{0%{{opacity:0}}50%{{opacity:1}}}}
 .tapl{{animation:tap .32s step-end infinite}}.tapr{{animation:tap .32s step-end -.16s infinite}}
 @keyframes tap{{50%{{transform:translateY(-1px)}}}}
 .ln{{transform-box:fill-box;transform-origin:left}}
 .neon{{filter:drop-shadow(0 0 1.2px {THEME['accent2']});animation:pulse 3s ease-in-out infinite}}
-.chat{{animation:pulse 2s ease-in-out infinite}}
-{walk_css}{code_css}
-@media (prefers-reduced-motion:reduce){{.st-wave,.st-walk,.bubble,.fb{{display:none}}}}
+.steam{{animation:steam 2.4s ease-out infinite both}}
+@keyframes steam{{0%{{transform:translateY(0);opacity:0}}25%{{opacity:.9}}100%{{transform:translateY(-7px);opacity:0}}}}
+{''.join(tr.css)}
+@media (prefers-reduced-motion:reduce){{.away,.bubble,.door-open,.fb{{display:none}}}}
 """
     return document(
         W, H,
         title=f"{ident['name']} — {ident['headline'][0]}",
-        desc=(f"Pixel-art scene: {ident['name']} waves saying \"hello, world!\", walks to the desk, "
-              "sits in front of the monitor and laptop and starts coding. " + " · ".join(ident["headline"])),
+        desc=(f"Pixel-art scene in a loop: {ident['name']} opens the door, waves saying \"hello, world!\", "
+              "walks to the desk and codes next to a steaming coffee, then turns the PC off, "
+              "waves \"see you!\" and leaves. " + " · ".join(ident["headline"])),
         body=f'<clipPath id="frame">{rect(0, 0, W, H, rx=10)}</clipPath>'
              + f'<g clip-path="url(#frame)">{scene}{"".join(overlay)}</g>'
              + rect(0.5, 0.5, W - 1, H - 1, rx=10, fill="none", stroke=THEME["border"]),
